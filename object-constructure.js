@@ -1,31 +1,115 @@
-function Person(name) {
-  this.name = name;
+myLibrary = [];
+
+const dialog = document.getElementById("bookDialog");
+const editBookDialog = document.getElementById("editbookDialog");
+const form = document.getElementById("bookForm");
+const editform = document.getElementById("editbookForm");
+editingBook={};
+// OPEN
+function openDialog() {
+    dialog.showModal();
+}
+function editDialog() {
+    editBookDialog.showModal();
 }
 
-Person.prototype.sayName = function() {
-  console.log(`Hello, I'm ${this.name}!`);
-};
+function renderBook() {
+    const container = document.getElementById("book-list");
+    container.innerHTML = "";
 
-function Player(name, marker) {
-  this.name = name;
-  this.marker = marker;
+    myLibrary.forEach(book => {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+        <h3>${book.title}</h3>
+        <p>${book.author}</p>
+        <p>${book.page}</p>
+        <p>${book.read ? "reading" : "not read yet"}</p>
+        <div>
+            <button class="delete-btn" data-id="${book.id}">Delete</button>
+            <button class="edit-btn" data-id="${book.id}">Edit</button>
+        </div>
+        `;
+        
+        container.appendChild(card);
+    });
 }
 
-Player.prototype.getMarker = function() {
-  console.log(`My marker is "${this.marker}"`);
-};
+function removeBook(id){
+    myLibrary=myLibrary.filter(b=> b.id!== id)
+    renderBook();
+}
+// CLOSE
+function closeDialog() {
+  dialog.close();
+}
 
-Object.getPrototypeOf(Player.prototype); // returns Object.prototype
+form.addEventListener("submit", function (e) {
+    e.preventDefault();
 
-// Now make `Player` objects inherit from `Person`
-Object.setPrototypeOf(Player.prototype, Person.prototype);
-Object.getPrototypeOf(Player.prototype); // returns Person.prototype
+    const title = document.getElementById("title").value;
+    const author = document.getElementById("author").value;
+    const page = document.getElementById("page").value;
+    const read = document.getElementById("read").checked;
+    const id = crypto.randomUUID();
 
-const player1 = new Player("steve", "X");
-const player2 = new Player("also steve", "O");
+    const newBook = {
+        id : id,
+        title:title,
+        author:author,
+        page:page,
+        read:read
+    }
+    myLibrary.push(newBook);
+    renderBook();
+    dialog.close();
+})
 
-player1.sayName(); // Hello, I'm steve!
-player2.sayName(); // Hello, I'm also steve!
+editform.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const title = document.getElementById("edittitle").value;
+    const author = document.getElementById("editauthor").value;
+    const page = document.getElementById("editpage").value;
+    const read = document.getElementById("editread").checked;
+    console.log(`object ${title}`);
+    myLibrary = myLibrary.map(b => {
+        if (b.id === editingBook.id) {
+            return { ...b, title, author, page, read };
+        }
+        return b;
+    });
+    renderBook();
+    editBookDialog.close();
+})
 
-player1.getMarker(); // My marker is "X"
-player2.getMarker(); // My marker is "O"
+document.getElementById("book-list").addEventListener("click", (e) => {
+    if (e.target.classList.contains("delete-btn")) {
+        const id = e.target.dataset.id;
+        removeBook(id);
+        renderBook();
+    }
+    if (e.target.classList.contains("edit-btn")) {
+        const id = e.target.dataset.id;
+        editDialog();
+        editingBook = myLibrary.find(b => b.id === id);
+        document.getElementById("edittitle").value = editingBook.title;
+        document.getElementById("editauthor").value = editingBook.author;
+        document.getElementById("editpage").value = editingBook.page;
+        document.getElementById("editread").checked = editingBook.read;
+    }
+
+})
+
+function Book(id,title,author,pages,read) {
+    this.id =id;
+    this.title =title;
+    this.author=author;
+    this.pages=pages;
+    this.read=read;
+    
+}
+
+function addBookToLibrary() {
+  // take params, create a book then store it in the array
+}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Library App</title>
+
+  <!-- Link CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+   
+    <header class="header">
+    <h2>My Library</h2>
+    <nav>
+    <button class="btn" onclick="openDialog()">Add Book</button>
+    </nav>
+    </header>
+    <!-- Dialog -->
+    <dialog id="bookDialog">
+        <form id="bookForm">
+            <h3>Add Book</h3>
+
+            <input type="text" id="title" placeholder="Title" required />
+            <input type="text" id="author" placeholder="Author" required />
+            <input type="text" id="page" placeholder="Page Number" required />
+            <div>
+                <label>Have you read it? </label>
+                <input type="checkbox" id="read" />
+            </div>
+
+            <div>
+            <button type="submit">Save</button>
+            <button type="button" onclick="closeDialog()">Cancel</button>
+            </div>
+        </form>
+    </dialog>
+    <dialog id="editbookDialog">
+        <form id="editbookForm">
+            <h3>Edit Book</h3>
+
+            <input type="text" id="edittitle" placeholder="Title" required />
+            <input type="text" id="editauthor" placeholder="Author" required />
+            <input type="text" id="editpage" placeholder="Page Number" required />
+            <div>
+                <label>Have you read it? </label>
+                <input type="checkbox" id="editread" />
+            </div>
+
+            <div>
+            <button type="submit">Save</button>
+            <button type="button" onclick="closeDialog()">Cancel</button>
+            </div>
+        </form>
+    </dialog>
+    <div id="book-list" class="grid"></div>
+  <script src="object-constructure.js"></script>
+</body>
+</html>
